@@ -1,0 +1,86 @@
+% ---------------------------------------------------------------------
+%  CHƯƠNG 4 — CÀI ĐẶT VÀ THỬ NGHIỆM
+% ---------------------------------------------------------------------
+\chapter{Cài đặt và thử nghiệm}
+\label{ch:caidat}
+
+\begin{muctieu}
+Chương này mô tả môi trường triển khai, các thành phần chính kèm mã nguồn
+minh hoạ, và giao diện demo của hệ thống gợi ý phòng trọ.
+\end{muctieu}
+
+\section{Môi trường triển khai}
+
+Hệ thống được phát triển và thử nghiệm trên máy tính cá nhân với CPU Intel
+Core i5, RAM 8~GB, hệ điều hành Windows 11 và Python 3.11 cùng các thư viện
+đã nêu ở Bảng~\ref{tab:congcu}. Mã nguồn được quản lý bằng \code{git} và đặt
+tại kho \url{https://github.com/tencuaem/tim-phong-tro-da-nang}.
+
+\section{Các thành phần chính}
+
+Mã nguồn~\ref{lst:featurize} minh hoạ bước chuẩn hoá và vec-tơ hoá đặc
+trưng phòng trọ.
+
+\begin{lstlisting}[language=Python, caption={Chuẩn hoá và vec-tơ hoá đặc trưng phòng trọ.}, label={lst:featurize}]
+from sklearn.preprocessing import MinMaxScaler, OneHotEncoder
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+# Normalize numeric features to the same [0, 1] scale
+price_area_scaler = MinMaxScaler()
+price_area = price_area_scaler.fit_transform(df[["gia_thue", "dien_tich"]])
+
+# One-hot encode categorical district and amenity list
+district_encoder = OneHotEncoder(sparse_output=False)
+district_onehot = district_encoder.fit_transform(df[["quan"]])
+
+# TF-IDF for the free-text description field
+tfidf = TfidfVectorizer(max_features=500)
+desc_vectors = tfidf.fit_transform(df["mo_ta"])
+\end{lstlisting}
+
+Mã nguồn~\ref{lst:score} minh hoạ hàm tính điểm gợi ý theo
+Công thức~\eqref{eq:score} và xếp hạng phòng trọ.
+
+\begin{lstlisting}[language=Python, caption={Tính điểm gợi ý và xếp hạng phòng trọ.}, label={lst:score}]
+from sklearn.metrics.pairwise import cosine_similarity
+
+# Weighted score across the four feature groups (see Equation 2.1)
+def score_rooms(query_vec, room_vecs, weights):
+    sim_price = cosine_similarity(query_vec["price_area"], room_vecs["price_area"])
+    sim_area = cosine_similarity(query_vec["district"], room_vecs["district"])
+    sim_amenity = cosine_similarity(query_vec["amenity"], room_vecs["amenity"])
+    sim_desc = cosine_similarity(query_vec["desc"], room_vecs["desc"])
+
+    w1, w2, w3, w4 = weights
+    return w1 * sim_price + w2 * sim_area + w3 * sim_amenity + w4 * sim_desc
+
+def top_k_rooms(scores, room_ids, k=5):
+    # Return the k highest-scoring room ids, descending order
+    ranked = sorted(zip(room_ids, scores), key=lambda x: x[1], reverse=True)
+    return ranked[:k]
+\end{lstlisting}
+
+\section{Giao diện và demo}
+
+\begin{figure}[H]
+\centering
+% Bỏ dấu % ở dòng dưới và thay ten-anh.png bằng ảnh thật của em
+% \includegraphics[width=0.8\textwidth]{ten-anh.png}
+\fbox{\begin{minipage}[c][5cm][c]{0.8\textwidth}\centering
+  \itshape\color{gray500}[Chèn ảnh chụp màn hình giao diện tìm phòng trọ tại đây]
+\end{minipage}}
+\caption{Giao diện web cho phép nhập tiêu chí và xem danh sách phòng trọ
+gợi ý kèm bản đồ vị trí.}
+\label{fig:demo}
+\end{figure}
+
+\section{Kiểm thử}
+
+Hệ thống được kiểm thử với ba nhóm ca. Nhóm một là tiêu chí thông thường
+với ngân sách và khu vực rõ ràng. Nhóm hai là tiêu chí hẹp, ví dụ ngân sách
+rất thấp kết hợp yêu cầu nhiều tiện ích, để kiểm tra hệ thống xử lý thế nào
+khi không có phòng trọ nào thoả mãn đầy đủ. Nhóm ba là dữ liệu biên gồm
+không nhập tiêu chí nào, nhập ngân sách âm và nhập khu vực không tồn tại
+trong dữ liệu. Ở nhóm ba, hệ thống ban đầu báo lỗi khi ngân sách âm; lỗi
+được khắc phục bằng cách kiểm tra và chặn giá trị không hợp lệ trước khi
+đưa vào Công thức~\eqref{eq:score}.

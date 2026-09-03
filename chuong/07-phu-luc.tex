@@ -1,0 +1,87 @@
+% ---------------------------------------------------------------------
+%  PHỤ LỤC
+% ---------------------------------------------------------------------
+% Trong \backmatter thì \chapter đã tự thêm vào mục lục, không cần
+% \addcontentsline nữa, thêm vào là trùng neo dấu trang.
+\chapter{Phụ lục}
+\markboth{Phụ lục}{}
+
+\begin{chuy}
+\goiy{phụ lục là nơi đặt những nội dung dài không tiện chèn vào thân báo
+cáo: mã nguồn đầy đủ, bảng dữ liệu mở rộng, kết quả thử nghiệm bổ sung, biên
+bản hướng dẫn. Riêng mục A và mục B nên giữ lại.}
+\end{chuy}
+
+\section*{A. Hướng dẫn cài đặt và chạy chương trình}
+\phantomsection
+\addcontentsline{toc}{section}{A. Hướng dẫn cài đặt và chạy chương trình}
+
+Viết các bước để một người chưa từng thấy đồ án vẫn chạy được sản phẩm. Hội
+đồng sẽ chạy thử theo đúng các bước này.
+
+\begin{lstlisting}[language=bash, caption={Các bước cài đặt và khởi chạy ứng dụng.}]
+# 1. Clone the repository
+git clone https://github.com/tencuaem/ten-do-an.git
+cd ten-do-an
+
+# 2. Create a virtual environment and install dependencies
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+
+# 3. Train the model (skip if a trained checkpoint is provided)
+python train.py --epochs 30 --data data/
+
+# 4. Launch the web application, then open http://localhost:5000
+python app.py
+\end{lstlisting}
+
+\section*{B. Bảng tự kiểm trước khi nộp}
+\phantomsection
+\addcontentsline{toc}{section}{B. Bảng tự kiểm trước khi nộp}
+
+Trước khi in quyển, em tự đánh dấu vào từng ô dưới đây.
+
+\begin{tukiem}
+  \item Sản phẩm chạy được trên máy khác, không chỉ trên máy của em.
+  \item Đã chạy thử demo trên đúng môi trường sẽ dùng khi bảo vệ.
+  \item Mã nguồn nằm trên kho \code{git}, lịch sử commit cho thấy tiến độ
+        trải đều chứ không dồn vào tuần cuối.
+  \item Có tệp \code{README} và \code{requirements.txt} để người khác chạy lại.
+  \item Mọi hình, bảng và giải thuật đều có chú thích, có nhãn, và được nhắc
+        tới trong thân bài.
+  \item Mọi mục tiêu ở Chương~\ref{ch:modau} đều được đối chiếu ở
+        Chương~\ref{ch:ketluan}.
+  \item Mọi con số trong báo cáo trùng khớp với kết quả chạy thật, không có
+        số nào là ước lượng hay bịa.
+  \item Mọi tài liệu trong \code{refs.bib} đều được trích dẫn ít nhất một
+        lần, và mọi nguồn dữ liệu, mã tham khảo đều đã ghi rõ.
+  \item Đã khai báo phần nào có dùng công cụ trí tuệ nhân tạo hỗ trợ, và em
+        giải thích được toàn bộ hệ thống khi bị hỏi.
+  \item Đã xoá hết hộp gợi ý, mọi khối nội dung mẫu, và cả
+        Chương~\ref{ch:soanthao} vốn chỉ là sổ tra cứu.
+\end{tukiem}
+
+\begin{luuy}
+Hai mục cuối là lỗi hay gặp nhất khi dùng mẫu có sẵn. Trước khi nộp hãy tìm
+trong bản PDF xem còn dòng chữ xám \emph{NỘI DUNG MẪU} nào sót lại không.
+\end{luuy}
+
+\section*{C. Nhận xét của giảng viên hướng dẫn}
+\phantomsection
+\addcontentsline{toc}{section}{C. Nhận xét của giảng viên hướng dẫn}
+
+\khungnhanxet[7.5cm]
+
+\vspace{0.8em}
+\noindent\begin{minipage}[t]{0.5\textwidth}
+\color{daunavy}
+{\color{daumaroon}\bfseries Điểm số}
+
+\vspace{0.7em}
+\dongchamnhan{Bằng số:}
+
+\vspace{0.9em}
+\dongchamnhan{Bằng chữ:}
+\end{minipage}\hfill
+\okyten{\dauGVHD}{Giảng viên hướng dẫn}

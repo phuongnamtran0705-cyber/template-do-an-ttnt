@@ -1,0 +1,95 @@
+% ---------------------------------------------------------------------
+%  CHƯƠNG 2 — CƠ SỞ LÝ THUYẾT VÀ CÔNG NGHỆ
+% ---------------------------------------------------------------------
+\chapter{Cơ sở lý thuyết và công nghệ}
+\label{ch:coso}
+
+\begin{muctieu}
+Chương này trình bày lý thuyết về hệ gợi ý và cách tính độ tương đồng dùng
+trong đồ án, cùng danh mục công cụ và thư viện để xây dựng hệ thống.
+\end{muctieu}
+
+\section{Kiến thức nền tảng}
+
+\begin{dinhnghia}[Hệ gợi ý]
+Hệ gợi ý \en{(recommender system)} là hệ thống dự đoán mức độ phù hợp giữa
+một người dùng $u$ và một đối tượng $i$ trong tập đối tượng $\mathcal{I}$,
+từ đó xếp hạng và đề xuất những đối tượng có điểm phù hợp cao nhất cho
+người dùng.
+\end{dinhnghia}
+
+Hai hướng tiếp cận phổ biến nhất là lọc dựa trên nội dung
+\en{(content-based filtering)}, dựa vào đặc trưng của chính đối tượng và hồ
+sơ nhu cầu của người dùng, và lọc cộng tác \en{(collaborative filtering)},
+dựa vào hành vi của những người dùng có sở thích tương tự. Với bài toán tìm
+phòng trọ, số lượt tương tác của mỗi người dùng thường rất ít vì nhu cầu
+thuê trọ không lặp lại thường xuyên, nên lọc cộng tác thuần tuý dễ gặp vấn
+đề khởi động lạnh \en{(cold start)}. Đồ án chọn lọc dựa trên nội dung làm
+thành phần chính, vì mỗi phòng trọ luôn có đầy đủ đặc trưng mô tả ngay khi
+được đăng, không phụ thuộc vào lịch sử tương tác.
+
+Mỗi phòng trọ $i$ được biểu diễn bằng một vec-tơ đặc trưng $\mathbf{x}_i$
+gồm các thành phần đã chuẩn hoá: giá thuê, khu vực, diện tích, danh sách
+tiện ích và mô tả văn bản vec-tơ hoá theo TF-IDF. Nhu cầu của người dùng
+cũng được biểu diễn bằng một vec-tơ $\mathbf{q}$ cùng cấu trúc, ghép từ
+ngân sách mong muốn, khu vực ưu tiên, diện tích tối thiểu và các tiện ích
+bắt buộc. Độ phù hợp giữa nhu cầu và một phòng trọ được tính bằng tổng có
+trọng số của độ tương đồng cô-sin trên từng nhóm đặc trưng
+\begin{equation}
+\mathrm{score}(\mathbf{q}, \mathbf{x}_i) =
+  w_1 \cdot \mathrm{sim}_{\text{giá}} +
+  w_2 \cdot \mathrm{sim}_{\text{khu vực}} +
+  w_3 \cdot \mathrm{sim}_{\text{tiện ích}} +
+  w_4 \cdot \mathrm{sim}_{\text{mô tả}},
+\label{eq:score}
+\end{equation}
+trong đó mỗi $\mathrm{sim}(\cdot)$ là độ tương đồng cô-sin
+\begin{equation}
+\mathrm{sim}(\mathbf{a}, \mathbf{b}) =
+  \frac{\mathbf{a} \cdot \mathbf{b}}{\lVert \mathbf{a} \rVert \, \lVert \mathbf{b} \rVert}
+\label{eq:cosine}
+\end{equation}
+tính trên nhóm thành phần tương ứng, và $w_1, \dots, w_4$ là trọng số không
+âm có tổng bằng một. Các phòng trọ được xếp hạng giảm dần theo điểm số ở
+Công thức~\eqref{eq:score} và trả về $k$ phòng có điểm cao nhất.
+
+\begin{ghinho}
+Việc chuẩn hoá từng nhóm đặc trưng về cùng thang giá trị trước khi tính độ
+tương đồng cô-sin là bắt buộc, nếu không thành phần có giá trị tuyệt đối
+lớn hơn, ví dụ giá thuê tính bằng đồng, sẽ lấn át hoàn toàn các thành phần
+còn lại trong Công thức~\eqref{eq:score}.
+\end{ghinho}
+
+\section{Công cụ và thư viện}
+
+\begin{table}[H]
+\centering
+\caption{Công cụ và thư viện sử dụng trong đồ án.}
+\label{tab:congcu}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}>{\bfseries\color{daunavy}}l >{\color{daumaroon}}l l}
+\toprule
+\rowcolor{gray100}\bfseries\color{daunavy}Thành phần & \bfseries\color{daumaroon}Phiên bản & \bfseries\color{daunavy}Vai trò \\
+\midrule
+Python       & 3.11 & Ngôn ngữ lập trình chính \\
+pandas       & 2.2  & Đọc và xử lý dữ liệu phòng trọ dạng bảng \\
+scikit-learn & 1.4  & Vec-tơ hoá TF-IDF và tính độ tương đồng cô-sin \\
+Flask        & 3.0  & Xây dựng giao diện web và API gợi ý \\
+SQLite       & 3.x  & Lưu trữ dữ liệu phòng trọ và người dùng \\
+Leaflet.js   & 1.9  & Hiển thị bản đồ vị trí phòng trọ trên nền OpenStreetMap \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+\section{Các công trình liên quan}
+
+Các hệ thống gợi ý bất động sản và phòng cho thuê thường đi theo hai hướng
+chính. Hướng thứ nhất dùng lọc dựa trên nội dung với đặc trưng thủ công như
+giá, vị trí và diện tích, có ưu điểm dễ triển khai và không cần dữ liệu
+tương tác lớn~\cite{RussellNorvig2021}. Hướng thứ hai kết hợp thêm lọc cộng
+tác để tận dụng hành vi của những người dùng có sở thích tương tự, giúp
+tăng tính đa dạng của kết quả gợi ý nhưng đòi hỏi lượng dữ liệu tương tác đủ
+lớn để tránh khởi động lạnh~\cite{HoangKiem}. Đồ án này chọn hướng thứ nhất
+làm nền tảng, đồng thời bổ sung một thành phần cộng tác đơn giản dựa trên
+những phòng trọ mà người dùng có hồ sơ nhu cầu tương tự đã lưu lại, nhằm
+giảm bớt hạn chế của lọc dựa trên nội dung thuần tuý là kết quả gợi ý có xu
+hướng quá giống với tiêu chí đã nhập, thiếu bất ngờ hữu ích.

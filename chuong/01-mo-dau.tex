@@ -1,0 +1,69 @@
+% ---------------------------------------------------------------------
+%  CHƯƠNG 1 — MỞ ĐẦU
+% ---------------------------------------------------------------------
+\chapter{Mở đầu}
+\label{ch:modau}
+
+\begin{muctieu}
+Chương mở đầu trình bày lý do chọn đề tài, mục tiêu cần đạt, phạm vi thực
+hiện và bố cục báo cáo, giúp người đọc nắm được bức tranh tổng quan về đồ án
+xây dựng hệ thống hỗ trợ tìm phòng trọ tại Đà Nẵng.
+\end{muctieu}
+
+\section{Lý do chọn đề tài}
+
+Đà Nẵng là một trong những thành phố có số lượng sinh viên và lao động
+ngoại tỉnh nhập cư đông, kéo theo nhu cầu thuê phòng trọ rất lớn quanh các
+khu vực trường đại học, khu công nghiệp và trung tâm thành phố. Tuy nhiên,
+thông tin cho thuê phòng trọ hiện nằm rải rác trên nhiều kênh khác nhau như
+mạng xã hội, các nhóm chia sẻ và biển quảng cáo dán trước nhà, thiếu tính
+thống nhất và khó tra cứu theo đúng nhu cầu cá nhân. Người tìm trọ thường
+phải xem qua hàng chục tin đăng, so sánh thủ công giữa giá thuê, vị trí và
+tiện ích, mất nhiều thời gian mà vẫn có thể bỏ sót những lựa chọn phù hợp.
+Bài toán gợi ý \en{(recommendation)} trong trí tuệ nhân tạo cho phép tự
+động xếp hạng và đề xuất những phòng trọ phù hợp nhất dựa trên tiêu chí của
+từng người dùng, thay vì buộc người dùng phải tự lọc qua toàn bộ danh sách.
+Đề tài này được chọn vì vừa giải quyết một nhu cầu thực tế gần gũi với đời
+sống sinh viên, vừa là cơ hội để em vận dụng kiến thức về hệ gợi ý, xử lý
+dữ liệu và xây dựng ứng dụng web đã học trong học phần.
+
+\section{Mục tiêu của đồ án}
+
+Đồ án hướng tới các mục tiêu sau:
+\begin{itemize}[leftmargin=1.6em, itemsep=2pt]
+  \item Xây dựng được bộ dữ liệu phòng trọ tại khu vực Đà Nẵng với đầy đủ
+        thông tin về giá thuê, vị trí, diện tích và tiện ích.
+  \item Cài đặt được một mô hình gợi ý phòng trọ dựa trên nội dung, có khả
+        năng xếp hạng phòng trọ theo mức độ phù hợp với tiêu chí người
+        dùng nhập vào.
+  \item Đạt Precision@5 từ 0,7 trở lên khi đánh giá ngoại tuyến trên tập
+        tương tác người dùng thử nghiệm.
+  \item Phát triển giao diện web cho phép người dùng nhập tiêu chí tìm
+        phòng và xem danh sách gợi ý kèm bản đồ vị trí.
+  \item So sánh mô hình gợi ý dựa trên nội dung thuần tuý với phiên bản có
+        kết hợp tín hiệu từ người dùng tương tự, để làm rõ mức độ cải thiện.
+\end{itemize}
+
+\section{Phạm vi và đối tượng}
+
+Đồ án tập trung vào việc gợi ý phòng trọ, nhà trọ cho thuê dài hạn dành cho
+sinh viên và người đi làm tại khu vực nội thành Đà Nẵng, cụ thể là sáu
+quận trung tâm gồm Hải Châu, Thanh Khê, Sơn Trà, Ngũ Hành Sơn, Cẩm Lệ và
+Liên Chiểu. Dữ liệu phòng trọ được thu thập thông qua khảo sát trực tiếp và
+từ những tin đăng công khai được chủ trọ đồng ý cung cấp. Đồ án không xử lý
+loại hình căn hộ chung cư cao cấp hay khách sạn, không thực hiện chức năng
+đặt cọc hay thanh toán trực tuyến, và chưa triển khai ở quy mô sản xuất
+phục vụ số lượng người dùng lớn.
+
+\begin{luuy}
+Lỗi phổ biến nhất của đồ án là chọn phạm vi quá rộng rồi bỏ dở. Một bài toán
+hẹp làm tới nơi tới chốn luôn được chấm cao hơn một ý tưởng lớn còn dang dở.
+\end{luuy}
+
+\section{Bố cục báo cáo}
+
+Phần còn lại của báo cáo được tổ chức như sau. Chương~\ref{ch:coso} trình
+bày cơ sở lý thuyết và công nghệ sử dụng. Chương~\ref{ch:thietke} phân tích
+bài toán và thiết kế giải pháp. Chương~\ref{ch:caidat} mô tả quá trình cài
+đặt và thử nghiệm. Chương~\ref{ch:ketqua} trình bày kết quả và đánh giá.
+Chương~\ref{ch:ketluan} tổng kết và nêu hướng phát triển.

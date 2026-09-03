@@ -1,0 +1,99 @@
+% ---------------------------------------------------------------------
+%  CHƯƠNG 3 — PHÂN TÍCH VÀ THIẾT KẾ
+% ---------------------------------------------------------------------
+\chapter{Phân tích và thiết kế}
+\label{ch:thietke}
+
+\begin{muctieu}
+Chương này phân tích yêu cầu bài toán, đề xuất giải pháp, thiết kế kiến trúc
+hệ thống, thiết kế dữ liệu và thiết kế mô hình gợi ý phòng trọ.
+\end{muctieu}
+
+\section{Phân tích bài toán và yêu cầu}
+
+Hệ thống nhận đầu vào là tiêu chí tìm phòng của người dùng, gồm ngân sách
+tối đa, khu vực mong muốn, diện tích tối thiểu và danh sách tiện ích bắt
+buộc, và trả về danh sách phòng trọ được xếp hạng theo mức độ phù hợp kèm
+điểm số. Yêu cầu chức năng gồm nhập tiêu chí tìm kiếm, tính điểm và xếp
+hạng phòng trọ, hiển thị kết quả kèm bản đồ vị trí, và cho phép người dùng
+lưu lại phòng trọ quan tâm để cải thiện gợi ý ở những lần tìm kiếm sau. Yêu
+cầu phi chức năng gồm thời gian phản hồi dưới hai giây cho mỗi lượt tìm
+kiếm trên tập dữ liệu hiện có, và giao diện dùng được trên trình duyệt phổ
+thông cả ở máy tính lẫn điện thoại.
+
+\section{Thiết kế kiến trúc hệ thống}
+
+Kiến trúc hệ thống được trình bày ở Hình~\ref{fig:kientruc}. Dữ liệu đi
+tuần tự qua bốn khối, mỗi khối là một mô-đun độc lập trong mã nguồn.
+
+\begin{figure}[H]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[node distance=12mm and 14mm]
+  \node[objbox] (in) {Tiêu chí\\ tìm phòng};
+  \node[clsbox, right=of in]  (pre) {Chuẩn hoá\\ và vec-tơ hoá};
+  \node[clsbox, right=of pre] (sim) {Tính độ\\ tương đồng};
+  \node[clsbox, right=of sim] (rank) {Xếp hạng\\ theo điểm số};
+  \node[objbox, right=of rank] (out) {Danh sách\\ phòng gợi ý};
+  \draw[flowarr] (in)   -- (pre);
+  \draw[flowarr] (pre)  -- (sim);
+  \draw[flowarr] (sim)  -- (rank);
+  \draw[flowarr] (rank) -- (out);
+\end{tikzpicture}}
+\caption{Sơ đồ kiến trúc tổng thể của hệ thống.}
+\label{fig:kientruc}
+\end{figure}
+
+Khối tiêu chí tìm phòng nhận đầu vào từ giao diện web. Khối chuẩn hoá và
+vec-tơ hoá đưa tiêu chí người dùng và hồ sơ từng phòng trọ về cùng thang
+giá trị. Khối tính độ tương đồng áp dụng Công thức~\eqref{eq:score} trên
+toàn bộ phòng trọ còn trống trong cơ sở dữ liệu. Khối xếp hạng chọn ra
+$k$ phòng có điểm cao nhất, đồng thời trộn thêm một số phòng trọ được người
+dùng có hồ sơ tương tự đã lưu lại, trước khi trả kết quả cho giao diện.
+
+\section{Thiết kế dữ liệu}
+
+Bộ dữ liệu gồm 2.500 tin đăng phòng trọ tại sáu quận trung tâm Đà Nẵng,
+được chia thành 2.000 phòng dùng để xây dựng hồ sơ đặc trưng phục vụ gợi ý
+và 500 phòng giữ lại làm tập kiểm thử ngoại tuyến, cùng lịch sử tương tác
+đã lưu hoặc đã liên hệ của 200 người dùng thử nghiệm. Cấu trúc mỗi bản ghi
+phòng trọ được mô tả ở Bảng~\ref{tab:dulieu}.
+
+\begin{table}[H]
+\centering
+\caption{Cấu trúc bản ghi dữ liệu phòng trọ.}
+\label{tab:dulieu}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}>{\bfseries\color{daunavy}}l >{\color{daumaroon}}l l}
+\toprule
+\rowcolor{gray100}\bfseries\color{daunavy}Trường & \bfseries\color{daumaroon}Kiểu & \bfseries\color{daunavy}Mô tả \\
+\midrule
+id          & integer & Khoá định danh phòng trọ \\
+gia\_thue   & integer & Giá thuê hằng tháng, đơn vị nghìn đồng \\
+quan        & text    & Quận nơi phòng trọ toạ lạc \\
+dien\_tich  & float   & Diện tích phòng, đơn vị mét vuông \\
+tien\_ich   & text    & Danh sách tiện ích, phân tách bằng dấu phẩy \\
+mo\_ta      & text    & Mô tả chi tiết do chủ trọ cung cấp \\
+vi\_do, kinh\_do & float & Toạ độ dùng để hiển thị trên bản đồ \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+\section{Thiết kế mô hình gợi ý}
+
+Mô hình được chọn là lọc dựa trên nội dung có trọng số theo
+Công thức~\eqref{eq:score}, với bốn nhóm đặc trưng: giá thuê và diện tích
+được chuẩn hoá theo Min-Max, khu vực được mã hoá one-hot theo quận, tiện
+ích được mã hoá one-hot theo từng loại tiện ích, và mô tả văn bản được
+vec-tơ hoá bằng TF-IDF với n-gram bậc một. Trọng số $w_1, \dots, w_4$ trong
+Công thức~\eqref{eq:score} được chọn bằng tìm kiếm lưới trên tập kiểm thử
+ngoại tuyến, tối ưu theo Precision@5, không đụng tới 500 phòng trọ giữ lại
+làm tập đánh giá cuối cùng trong quá trình chọn trọng số. Thành phần cộng
+tác được cài đặt đơn giản bằng cách tìm năm người dùng có vec-tơ tiêu chí
+gần nhất với người dùng hiện tại, sau đó cộng thêm một phần điểm cho những
+phòng trọ đã được các người dùng đó lưu lại.
+
+\begin{luuy}
+Không được dùng tập kiểm thử cuối cùng để chọn trọng số hay siêu tham số.
+Làm vậy thì các độ đo báo cáo ở Chương~\ref{ch:ketqua} sẽ cao hơn thực tế,
+và em sẽ không giải thích được khi hội đồng hỏi tới.
+\end{luuy}

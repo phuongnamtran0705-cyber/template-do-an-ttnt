@@ -1,0 +1,24 @@
+\begin{thebibliography}{1}
+
+\bibitem{He2016}
+Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun.
+\newblock Deep residual learning for image recognition.
+\newblock In {\em IEEE Conference on Computer Vision and Pattern Recognition
+  (CVPR)}, pages 770--778, 2016.
+
+\bibitem{HoangKiem}
+Hoàng Kiếm.
+\newblock {\em Giáo trình nhập môn trí tuệ nhân tạo}.
+\newblock NXB Đại học Quốc gia Thành phố Hồ Chí Minh, 2007.
+
+\bibitem{Krizhevsky2012}
+Alex Krizhevsky, IIya Sutskever, and Geoffrey~E. Hinton.
+\newblock Imagenet classification with deep convolutional neural networks.
+\newblock In {\em Advances in Neural Information Processing Systems}, 2012.
+
+\bibitem{RussellNorvig2021}
+Stuart Russell and Peter Norvig.
+\newblock {\em Artificial Intelligence: A Modern Approach}.
+\newblock Pearson, 4 edition, 2021.
+
+\end{thebibliography}

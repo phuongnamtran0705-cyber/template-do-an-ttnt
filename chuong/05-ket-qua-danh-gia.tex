@@ -1,0 +1,68 @@
+% ---------------------------------------------------------------------
+%  CHƯƠNG 5 — KẾT QUẢ VÀ ĐÁNH GIÁ
+% ---------------------------------------------------------------------
+\chapter{Kết quả và đánh giá}
+\label{ch:ketqua}
+
+\begin{muctieu}
+Chương này trình bày kết quả đạt được, các độ đo đánh giá định lượng, phần
+bàn luận và những hạn chế còn tồn tại của hệ thống gợi ý phòng trọ.
+\end{muctieu}
+
+\section{Kết quả đạt được}
+
+Hệ thống đã hoàn thành các mục tiêu đề ra ở Chương~\ref{ch:modau}. Bộ dữ
+liệu 2.500 phòng trọ tại sáu quận trung tâm Đà Nẵng đã được xây dựng và làm
+sạch, mô hình gợi ý dựa trên nội dung đạt Precision@5 bằng 0,76, vượt
+ngưỡng mục tiêu 0,7, và giao diện web cho phép người dùng nhập tiêu chí và
+nhận danh sách phòng trọ gợi ý kèm bản đồ trong thời gian thực.
+
+\section{Độ đo đánh giá}
+
+Vì bài toán là xếp hạng và gợi ý chứ không phải phân lớp, đồ án dùng các độ
+đo phổ biến cho hệ gợi ý gồm Precision@5, Recall@5 và NDCG@5, tính trên
+lịch sử tương tác đã lưu hoặc đã liên hệ của 200 người dùng thử nghiệm, đối
+chiếu với 500 phòng trọ ở tập kiểm thử ngoại tuyến. Bảng~\ref{tab:ketqua}
+so sánh mô hình chỉ dùng lọc dựa trên nội dung với phiên bản kết hợp thêm
+thành phần cộng tác đơn giản.
+
+\begin{table}[H]
+\centering
+\caption{So sánh hiệu năng các phiên bản mô hình gợi ý.}
+\label{tab:ketqua}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}>{\bfseries\color{daunavy}}l ccc}
+\toprule
+\rowcolor{gray100}\bfseries\color{daunavy}Mô hình & \bfseries\color{daumaroon}Precision@5 & \bfseries\color{daumaroon}Recall@5 & \bfseries\color{daumaroon}NDCG@5 \\
+\midrule
+Chỉ lọc dựa trên nội dung          & 0,69 & 0,60 & 0,75 \\
+Kết hợp thành phần cộng tác        & 0,76 & 0,68 & 0,81 \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+Ngoài đánh giá ngoại tuyến, đồ án tổ chức khảo sát nhanh trên 30 sinh viên
+dùng thử hệ thống, chấm mức độ hài lòng theo thang điểm 5. Kết quả trung
+bình đạt 4,1 điểm, trong đó tiêu chí được đánh giá cao nhất là tốc độ phản
+hồi và tiêu chí thấp nhất là độ đa dạng của kết quả gợi ý.
+
+\section{Bàn luận}
+
+Phiên bản kết hợp thành phần cộng tác nhỉnh hơn phiên bản chỉ dùng nội dung
+khoảng bảy điểm phần trăm ở Precision@5. Mức cải thiện này đến từ việc một
+số phòng trọ tốt nhưng có mô tả sơ sài, dẫn đến độ tương đồng văn bản thấp,
+vẫn được gợi ý nhờ được người dùng có nhu cầu tương tự lưu lại trước đó.
+Phân tích các trường hợp gợi ý chưa tốt cho thấy phần lớn tập trung ở những
+tiêu chí có khu vực mong muốn ít phòng trọ, khi đó hệ thống buộc phải nới
+lỏng điều kiện khu vực để trả đủ năm kết quả, làm giảm độ phù hợp trung
+bình của danh sách gợi ý.
+
+\section{Hạn chế}
+
+\begin{luuy}
+Hệ thống còn gợi ý kém đa dạng khi tiêu chí người dùng quá chặt, do bản chất
+lọc dựa trên nội dung có xu hướng trả về những phòng trọ giống nhau. Thành
+phần cộng tác chỉ dựa trên năm người dùng gần nhất nên chưa phát huy hết
+tác dụng khi số lượng người dùng còn ít. Dữ liệu phòng trọ cũng chưa được
+cập nhật tự động, một số tin đăng có thể đã hết phòng nhưng vẫn còn trong
+hệ thống.
+\end{luuy}
